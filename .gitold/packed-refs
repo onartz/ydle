@@ -1,0 +1,4 @@
+# pack-refs with: peeled 
+3764e014aab9cc7413f9b18c7a22fbd6872662c6 refs/remotes/origin/master
+3c63c44a31c69e7428f694f05337607c34c44c80 refs/remotes/origin/master_I2C
+3764e014aab9cc7413f9b18c7a22fbd6872662c6 refs/tags/0.5
