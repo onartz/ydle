@@ -441,6 +441,30 @@ int protocolRF::extractData(int index,int &itype,int &ivalue,uint8_t* pBuffer /*
 			ptr++;
 			iNbByteRest-=3;
 			break;	
+		
+	// 20 bits no signed
+		case DATA_HP  :
+			cout << "DATA_HP received" << endl;
+			ivalue=(*ptr&0x0F)<<16;
+			ptr++;
+			ivalue+=(*ptr)<<8;
+			ptr++;
+			ivalue+=*ptr;
+			ptr++;
+			iNbByteRest-=3;
+			break;	
+		
+	// 20 bits no signed
+		case DATA_HC  :
+cout << "DATA_HC" << endl;
+			ivalue=(*ptr&0x0F)<<16;
+			ptr++;
+			ivalue+=(*ptr)<<8;
+			ptr++;
+			ivalue+=*ptr;
+			ptr++;
+			iNbByteRest-=3;
+			break;	
 		}
 
 		if (index==iCurrentValueIndex)

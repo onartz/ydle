@@ -90,6 +90,10 @@ int IhmCommunicationThread::putFrame(protocolRF::Frame_t & frame){
 				break;
 			case 8 :
 				break;
+			case 9 :
+				break;
+			case 10 :
+				break;
 			default:
 				YDLE_DEBUG << "Weird value type in the frame : " << type;
 				continue;
