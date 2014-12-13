@@ -170,7 +170,7 @@ void protocolRF::initialisation()
 	start_bit2[1]=true;
 	start_bit2[6]=true;
 
-	debugActivated = false;
+	debugActivated = true;
 	m_sample_value = 0;
 	sample_count = 1;
 	last_sample_value = 0;
@@ -354,6 +354,7 @@ int protocolRF::extractData(int position, int & data){
 // ----------------------------------------------------------------------------
 int protocolRF::extractData(int index,int &itype,int &ivalue,uint8_t* pBuffer /*=NULL*/,int ilen /*=0*/)
 {
+	YDLE_DEBUG << "ExtractData 3";
 	uint8_t* ptr;
 	bool bifValueisNegativ=false;
 	int iCurrentValueIndex=0;
@@ -361,7 +362,6 @@ int protocolRF::extractData(int index,int &itype,int &ivalue,uint8_t* pBuffer /*
 	int  iLenOfBuffer = 0;
 	int  iModifType=0;
 	int  iNbByteRest=0;
-
 	if(pBuffer==NULL)
 	{
 		ptr=m_receivedframe.data;
@@ -395,7 +395,7 @@ int protocolRF::extractData(int index,int &itype,int &ivalue,uint8_t* pBuffer /*
 		{
 			iModifType=itype;
 		}
-
+		YDLE_DEBUG << "Type " << iModifType;
 		switch(iModifType)
 		{
 		// 4 bits no signed

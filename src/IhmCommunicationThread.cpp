@@ -90,6 +90,10 @@ int IhmCommunicationThread::putFrame(protocolRF::Frame_t & frame){
 				break;
 			case 8 :
 				break;
+			case 9 :
+				break;
+			case 10 :
+				break;
 			default:
 				YDLE_DEBUG << "Weird value type in the frame : " << type;
 				continue;
@@ -131,6 +135,7 @@ void IhmCommunicationThread::stop(){
  * */
 int IhmCommunicationThread::extractData(protocolRF::Frame_t & frame, int index,int &itype,int &ivalue)
 {
+	YDLE_DEBUG << "extractData";
 	uint8_t* ptr;
 	bool bifValueisNegativ=false;
 	int iCurrentValueIndex=0;
@@ -164,6 +169,7 @@ int IhmCommunicationThread::extractData(protocolRF::Frame_t & frame, int index,i
 		{
 			iModifType=itype;
 		}
+		YDLE_DEBUG << "iModifType : " << int(iModifType);
 
 		switch(iModifType)
 		{
@@ -207,6 +213,20 @@ int IhmCommunicationThread::extractData(protocolRF::Frame_t & frame, int index,i
 			ivalue+=(*ptr)<<8;
 			ptr++;
 			ivalue+=*ptr;
+			ptr++;
+			iNbByteRest-=3;
+			break;
+		case DATA_HP :
+			ivalue=(*ptr&0x0F)<<16;
+			ptr++;
+			ivalue+=(*ptr)<<8;
+			ptr++;
+			iNbByteRest-=3;
+			break;
+		case DATA_HC :
+			ivalue=(*ptr&0x0F)<<16;
+			ptr++;
+			ivalue+=(*ptr)<<8;
 			ptr++;
 			iNbByteRest-=3;
 			break;
