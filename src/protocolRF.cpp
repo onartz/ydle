@@ -354,7 +354,6 @@ int protocolRF::extractData(int position, int & data){
 // ----------------------------------------------------------------------------
 int protocolRF::extractData(int index,int &itype,int &ivalue,uint8_t* pBuffer /*=NULL*/,int ilen /*=0*/)
 {
-	YDLE_DEBUG << "ExtractData 3";
 	uint8_t* ptr;
 	bool bifValueisNegativ=false;
 	int iCurrentValueIndex=0;
@@ -395,7 +394,6 @@ int protocolRF::extractData(int index,int &itype,int &ivalue,uint8_t* pBuffer /*
 		{
 			iModifType=itype;
 		}
-		YDLE_DEBUG << "Type " << iModifType;
 		switch(iModifType)
 		{
 		// 4 bits no signed

@@ -58,8 +58,9 @@ void IhmCommunicationThread::run(){
 int IhmCommunicationThread::putFrame(protocolRF::Frame_t & frame){
 	std::string  post_data;
 	std::stringstream buf;
+	std::ofstream outFile;
 	int valueInt;int type;int sender;float value; int index;
-
+	bool send;
 	sender = (int)frame.sender;
 	index = 0;
 	
@@ -84,6 +85,8 @@ int IhmCommunicationThread::putFrame(protocolRF::Frame_t & frame){
 			case 5 :
 				break;
 			case 6 :
+				send = true;
+				buf << "[{\"name\":\"PAPP\",\"columns\":[\"value\"],\"points\":[[" << value << "]]}]";
 				break;
 			case 7 :
 				value=valueInt*.025;
@@ -91,8 +94,22 @@ int IhmCommunicationThread::putFrame(protocolRF::Frame_t & frame){
 			case 8 :
 				break;
 			case 9 :
+				send = false;
+				//Store HP in a file to be read every day at 00:00 by python script	
+				outFile.open("HP.value");
+				buf << "[{\"name\":\"HP\",\"columns\":[\"value\"],\"points\":[[" << value << "]]}]";
+				outFile.clear();
+				outFile << buf.rdbuf() << endl;
+				outFile.close();
 				break;
 			case 10 :
+				send = false;
+				//Store HC in a file to be read every day at 00:00 by python script
+				outFile.open("HC.value");
+				buf << "[{\"name\":\"HC\",\"columns\":[\"value\"],\"points\":[[" << value << "]]}]";
+				outFile.clear();
+				outFile << buf.rdbuf() << endl;
+				outFile.close();	
 				break;
 			default:
 				YDLE_DEBUG << "Weird value type in the frame : " << type;
@@ -100,23 +117,15 @@ int IhmCommunicationThread::putFrame(protocolRF::Frame_t & frame){
 		}			
 		YDLE_DEBUG << "Data received : From "<< sender << " Type : "<< type << " Value : " << value << "\n";
 		//Modifs Oli
-		RestBrowser browser(this->web_address);
-		std::stringstream request;
-		/* [
-    {"name":"HP","columns":["value"],"points":[[HP]]},
-    {"name":"HC","columns":["value"],"points":[[HC]]},
-    {"name":"IMAX","columns":["value"],"points":[[IMAX]]}
-
-	curl -X POST -d '[{"name":"PAPP","columns":["value"],"points":[[1234]]}]'
-
-       ]*/
-
-		request << "/db/Loumanolkar/series?u=root&p=root";
-		buf << "[{\"name\":\"PAPP\",\"columns\":[\"value\"],\"points\":[[" << value << "]]}]";
-
-		//buf << "sender=" << sender << "&type=" << type << "&data=" << value << "\r\n" ;
-		browser.doPost(request.str(), buf.str());
-		buf.str(std::string());
+		if(send == true)
+		{
+			RestBrowser browser(this->web_address);
+			std::stringstream request;
+			//TODO : prendre u et p dans ydle.conf
+			request << "/db/Loumanolkar/series?u=root&p=root";
+			browser.doPost(request.str(), buf.str());
+			buf.str(std::string());
+		}
 		index++;
 	}
 	
@@ -135,7 +144,6 @@ void IhmCommunicationThread::stop(){
  * */
 int IhmCommunicationThread::extractData(protocolRF::Frame_t & frame, int index,int &itype,int &ivalue)
 {
-	YDLE_DEBUG << "extractData";
 	uint8_t* ptr;
 	bool bifValueisNegativ=false;
 	int iCurrentValueIndex=0;
