@@ -179,8 +179,8 @@ void protocolRF::initialisation()
 	rx_bits = 0;
 	t_start = 0;
 	rx_active = 0;
-	speed = 1000;
-//speed = 500;	
+//	speed = 1000;
+	speed = 250;	
 t_per = 1000000/speed;
 	f_bit = t_per/8;
 	bit_value = 0;
