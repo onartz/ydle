@@ -182,7 +182,6 @@ int IhmCommunicationThread::extractData(protocolRF::Frame_t & frame, int index,i
 		{
 			iModifType=itype;
 		}
-		YDLE_DEBUG << "iModifType : " << int(iModifType);
 
 		switch(iModifType)
 		{
