@@ -138,24 +138,7 @@ master.o: master.cpp /usr/local/include/wiringPi.h master.h \
  /usr/include/c++/4.6/system_error \
  /usr/include/c++/4.6/arm-linux-gnueabihf/./bits/error_constants.h \
  /usr/include/c++/4.6/stdexcept /usr/include/c++/4.6/condition_variable \
- logging.h restLoggerDestination.h /usr/include/c++/4.6/queue \
- /usr/include/c++/4.6/deque /usr/include/c++/4.6/bits/stl_deque.h \
- /usr/include/c++/4.6/bits/deque.tcc /usr/include/c++/4.6/bits/stl_heap.h \
- /usr/include/c++/4.6/bits/stl_queue.h /usr/include/jsoncpp/json/json.h \
- /usr/include/jsoncpp/json/autolink.h /usr/include/jsoncpp/json/config.h \
- /usr/include/jsoncpp/json/value.h /usr/include/jsoncpp/json/forwards.h \
- /usr/include/jsoncpp/json/reader.h /usr/include/jsoncpp/json/features.h \
- /usr/include/c++/4.6/stack /usr/include/c++/4.6/bits/stl_stack.h \
- /usr/include/jsoncpp/json/writer.h webServer.h \
- /usr/include/arm-linux-gnueabihf/sys/socket.h \
- /usr/include/arm-linux-gnueabihf/sys/uio.h \
- /usr/include/arm-linux-gnueabihf/bits/uio.h \
- /usr/include/arm-linux-gnueabihf/bits/socket.h \
- /usr/include/arm-linux-gnueabihf/bits/sockaddr.h \
- /usr/include/arm-linux-gnueabihf/asm/socket.h \
- /usr/include/arm-linux-gnueabihf/asm/sockios.h /usr/include/microhttpd.h \
- /usr/include/c++/4.6/set /usr/include/c++/4.6/bits/stl_set.h \
- /usr/include/c++/4.6/bits/stl_multiset.h NodeRequestHandler.h
+ logging.h
 
 /usr/local/include/wiringPi.h:
 
@@ -532,63 +515,3 @@ IhmCommunicationThread.h:
 /usr/include/c++/4.6/condition_variable:
 
 logging.h:
-
-restLoggerDestination.h:
-
-/usr/include/c++/4.6/queue:
-
-/usr/include/c++/4.6/deque:
-
-/usr/include/c++/4.6/bits/stl_deque.h:
-
-/usr/include/c++/4.6/bits/deque.tcc:
-
-/usr/include/c++/4.6/bits/stl_heap.h:
-
-/usr/include/c++/4.6/bits/stl_queue.h:
-
-/usr/include/jsoncpp/json/json.h:
-
-/usr/include/jsoncpp/json/autolink.h:
-
-/usr/include/jsoncpp/json/config.h:
-
-/usr/include/jsoncpp/json/value.h:
-
-/usr/include/jsoncpp/json/forwards.h:
-
-/usr/include/jsoncpp/json/reader.h:
-
-/usr/include/jsoncpp/json/features.h:
-
-/usr/include/c++/4.6/stack:
-
-/usr/include/c++/4.6/bits/stl_stack.h:
-
-/usr/include/jsoncpp/json/writer.h:
-
-webServer.h:
-
-/usr/include/arm-linux-gnueabihf/sys/socket.h:
-
-/usr/include/arm-linux-gnueabihf/sys/uio.h:
-
-/usr/include/arm-linux-gnueabihf/bits/uio.h:
-
-/usr/include/arm-linux-gnueabihf/bits/socket.h:
-
-/usr/include/arm-linux-gnueabihf/bits/sockaddr.h:
-
-/usr/include/arm-linux-gnueabihf/asm/socket.h:
-
-/usr/include/arm-linux-gnueabihf/asm/sockios.h:
-
-/usr/include/microhttpd.h:
-
-/usr/include/c++/4.6/set:
-
-/usr/include/c++/4.6/bits/stl_set.h:
-
-/usr/include/c++/4.6/bits/stl_multiset.h:
-
-NodeRequestHandler.h:

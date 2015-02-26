@@ -21,9 +21,9 @@
 #include "SettingsParser.h"
 #include "IhmCommunicationThread.h"
 #include "logging.h"
-#include "restLoggerDestination.h"
-#include "webServer.h"
-#include "NodeRequestHandler.h"
+//#include "restLoggerDestination.h"
+//#include "webServer.h"
+//#include "NodeRequestHandler.h"
 
 using namespace std;
 protocolRF *g_ProtocolRF;
@@ -137,8 +137,8 @@ int main(int argc, char** argv) {
 			new ydle::StdErrorLogDestination(ydle::YDLE_LOG_DEBUG);
 
 	ydle::InitLogging(ydle::YDLE_LOG_DEBUG, stderr_log);
-
-	// Parse command line and config file
+//	ydle::SyslogDestination *sys_log = new ydle::SyslogDestination(ydle::YDLE_LOG_INFO);
+//	ydle::InitLogging(ydle::YDLE_LOG_INFO, sys_log);	// Parse command line and config file
 	ydle::SettingsParser* s;
 
 	s = new ydle::SettingsParser();
@@ -164,7 +164,7 @@ int main(int argc, char** argv) {
 
 	// Config read ok, adjust the log level according to the user configuration
 	stderr_log->setLevel((ydle::log_level)atoi(master_config["log_stderr_level"].c_str()));
-
+//	sys_log->setLevel((ydle::log_level)atoi(master_config["log_stderr_level"].c_str()));	
 	struct sigaction sigIntHandler;
 	sigIntHandler.sa_handler = exit_handler;
 	sigemptyset(&sigIntHandler.sa_mask);
@@ -173,8 +173,8 @@ int main(int argc, char** argv) {
 
 	std::stringstream ihm;
 //	ihm <<"sandbox.influxdb.com:8086";
-	ihm << "193.55.104.132:8086";
-	ydle::restLoggerDestination *restLog =
+//	ihm << "193.55.104.132:8086";
+/*	ydle::restLoggerDestination *restLog =
 			new ydle::restLoggerDestination(
 					(ydle::log_level)atoi(master_config["log_rest_level"].c_str()),
 					ihm.str()
@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
 	restLog->Init();
 
 	ydle::InitLogging(ydle::YDLE_LOG_DEBUG, restLog);
-
+*/
 	//log("Program start");
 	YDLE_DEBUG << "Program start";
 	//End the program if the wiringPi library is not found
@@ -198,14 +198,14 @@ int main(int argc, char** argv) {
 	// comment if you don't want debug
 	g_ProtocolRF->debugMode();
 
-	WebServer::HTTPServer::HTTPServerOptions options;
+/*	WebServer::HTTPServer::HTTPServerOptions options;
 	int port = atoi(master_config["port"].c_str());
 	options.port = port;
 
 	// Launch webserver
 	WebServer::HTTPServer *server;
 	server = new WebServer::HTTPServer(options);
-
+*/
 	pthread_t threadListenRF;
 
 	// Start listen thread
@@ -215,12 +215,12 @@ int main(int argc, char** argv) {
 	}
 
 	try {
-		WebServer::NodeRequestHandler* n = new WebServer::NodeRequestHandler(
+/*		WebServer::NodeRequestHandler* n = new WebServer::NodeRequestHandler(
 				g_ProtocolRF);
 		server->RegisterHandler("/node", n);
 		server->Init();
 		server->Run();
-
+*/
 		std::stringstream temp;
 		//temp << master_config["dataLogger_address"] << ":" << master_config["dataLogger_port"];
 		//temp << "sandbox.influxdb.com:8086" ;

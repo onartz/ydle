@@ -170,7 +170,7 @@ void protocolRF::initialisation()
 	start_bit2[1]=true;
 	start_bit2[6]=true;
 
-	debugActivated = true;
+	debugActivated = false;
 	m_sample_value = 0;
 	sample_count = 1;
 	last_sample_value = 0;
@@ -179,8 +179,8 @@ void protocolRF::initialisation()
 	rx_bits = 0;
 	t_start = 0;
 	rx_active = 0;
-//	speed = 1000;
-	speed = 250;	
+	speed = 1000;
+//	speed = 250;	
 t_per = 1000000/speed;
 	f_bit = t_per/8;
 	bit_value = 0;
@@ -499,7 +499,7 @@ void protocolRF::addData(int type,int data)
 			m_sendframe.data[oldindex]+=data&0x0f;
 		}
 		else
-			YDLE_WARN << "invalid trame len in addData";
+			YDLE_INFO << "invalid trame len in addData";
 		break;	
 
 		// 12 bits signed
@@ -709,7 +709,7 @@ void protocolRF::pll()
 
 				// crc calcul
 				m_receivedframe.crc = computeCrc(&m_receivedframe);
-//printFrame(m_receivedframe);
+printFrame(m_receivedframe);
 				if(m_data[rx_bytes_count-1] != m_receivedframe.crc) {	
 					if(debugActivated)
 						YDLE_WARN << "crc error !!!";

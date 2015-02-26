@@ -12,6 +12,7 @@
 #include "logging.h"
 #include "IhmCommunicationThread.h"
 #include "RestBrowser.h"
+#include <ctime>
 
 namespace ydle {
 
@@ -20,16 +21,19 @@ IhmCommunicationThread::IhmCommunicationThread(std::string web_adress, list<prot
 	this->mutex_listcmd = mutex;
 	this->running = true;
 	this->web_address = web_adress;
+
+
 }
 
 IhmCommunicationThread::~IhmCommunicationThread() {
-
 }
 
 void IhmCommunicationThread::run(){
 	YDLE_INFO << "Start Communication thread";
 	protocolRF::Frame_t frame;
 	int size;
+	time_t timer = time;
+  	time_t lastTimer = timer;
 
 	while(this->running){
 		pthread_mutex_lock(this->mutex_listcmd);
@@ -42,13 +46,19 @@ void IhmCommunicationThread::run(){
 				frame = this->ListCmd->front();
 				this->ListCmd->pop_front();
 				pthread_mutex_unlock(this->mutex_listcmd);
-
-				if(this->putFrame(frame) == 0){
+				//Modif : si on perd la frame, ce n'est pas grave, on enverra la prochane
+				timer = time(0);
+				if(timer > lastTimer+120){
+					YDLE_DEBUG << "Sending................................." << endl;
+					this->putFrame(frame);
+					lastTimer = timer;
+				}
+				/*if(this->putFrame(frame) == 0){
 					// Failed to send the data, so re-insert the frame in the waiting list
 					pthread_mutex_lock(this->mutex_listcmd);
 					this->ListCmd->push_back(frame);
 					pthread_mutex_unlock(this->mutex_listcmd);
-				}
+				}*/
 			}
 		}
 		std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -67,6 +77,9 @@ int IhmCommunicationThread::putFrame(protocolRF::Frame_t & frame){
 	// TODO: Need a better method to get the data
 	while(this->extractData(frame, index, type, valueInt)==1)
 	{
+		//YDLE_INFO << "putFrame : index = " << index << " type = " << type << " valueInt = " << valueInt;
+
+		//YDLE_INFO << "putFrame, extractData " << valueInt;
 		//Reconversion valueInt->value
 		value=valueInt;
 		switch(type)
@@ -112,8 +125,10 @@ int IhmCommunicationThread::putFrame(protocolRF::Frame_t & frame){
 				outFile.close();	
 				break;
 			default:
-				YDLE_DEBUG << "Weird value type in the frame : " << type;
-				continue;
+				YDLE_DEBUG << "Put : Weird value type in the frame : " << type;
+				//Modif : return
+				return -1;				
+				//continue;
 		}			
 		YDLE_DEBUG << "Data received : From "<< sender << " Type : "<< type << " Value : " << value << "\n";
 		//Modifs Oli
@@ -154,6 +169,7 @@ int IhmCommunicationThread::extractData(protocolRF::Frame_t & frame, int index,i
 
 	iLenOfBuffer=(int)frame.taille;
 	ptr=frame.data;
+//YDLE_DEBUG << "IhmCommunicationThread : ExtractData";
 
 	if(iLenOfBuffer <2) // Min 1 byte of data with the 1 bytes CRC always present, else there is no data
 		return -1;
@@ -177,7 +193,6 @@ int IhmCommunicationThread::extractData(protocolRF::Frame_t & frame, int index,i
 		{
 			iModifType=itype;
 		}
-
 		switch(iModifType)
 		{
 		// 4 bits no signed
@@ -238,7 +253,7 @@ int IhmCommunicationThread::extractData(protocolRF::Frame_t & frame, int index,i
 			iNbByteRest-=3;
 			break;
 		default :
-			YDLE_DEBUG << "Weird value type in the frame : " << iModifType;
+			YDLE_INFO << "IhmCommunicationThread.cpp : ExtractData : Weird value type in the frame : " << iModifType;
 			return 0;
 		}
 
